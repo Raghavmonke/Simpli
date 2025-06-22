@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class MenuHandler {
 
-
+    //display files    
     public static void displayMainMenu(Scanner scanner) {
         while (true) {
             System.out.println("\nMain Menu:");
@@ -13,7 +13,7 @@ public class MenuHandler {
             System.out.println("3. Exit application");
             System.out.print("Enter your choice: ");
 
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             switch (input) {
                 case "1":
                     FileManager.displayFiles(LockedMeApp.ROOT_DIRECTORY);
@@ -29,8 +29,7 @@ public class MenuHandler {
             }
         }
     }
-
-
+    //display menu of business operations
     private static void displayBusinessMenu(Scanner scanner) {
         while (true) {
             System.out.println("\nBusiness Operations:");
@@ -44,18 +43,33 @@ public class MenuHandler {
             switch (choice) {
                 case "a":
                     System.out.print("Enter the file name to add: ");
-                    FileManager.addFile(LockedMeApp.ROOT_DIRECTORY, scanner.nextLine().trim());
+                    String addName = scanner.nextLine().trim();
+                    if (addName.isEmpty()) {
+                        System.out.println("File name cannot be empty.");
+                        break;
+                    }
+                    FileManager.addFile(LockedMeApp.ROOT_DIRECTORY, addName);
                     break;
                 case "b":
                     System.out.print("Enter the exact file name to delete: ");
-                    FileManager.deleteFile(LockedMeApp.ROOT_DIRECTORY, scanner.nextLine().trim());
+                    String delName = scanner.nextLine().trim();
+                    if (delName.isEmpty()) {
+                        System.out.println("File name cannot be empty.");
+                        break;
+                    }
+                    FileManager.deleteFile(LockedMeApp.ROOT_DIRECTORY, delName);
                     break;
                 case "c":
                     System.out.print("Enter the file name to search: ");
-                    FileManager.searchFile(LockedMeApp.ROOT_DIRECTORY, scanner.nextLine().trim());
+                    String searchName = scanner.nextLine().trim();
+                    if (searchName.isEmpty()) {
+                        System.out.println("File name cannot be empty.");
+                        break;
+                    }
+                    FileManager.searchFile(LockedMeApp.ROOT_DIRECTORY, searchName);
                     break;
                 case "d":
-                    return; // back to main menu
+                    return;
                 default:
                     System.out.println("Invalid option. Please enter a, b, c, or d.");
             }

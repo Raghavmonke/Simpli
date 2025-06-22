@@ -18,12 +18,12 @@ public class FileManager {
 
         String[] files = folder.list();
         if (files == null || files.length == 0) {
-            System.out.println("No files found");
+            System.out.println("No files found in the directory.");
             return;
         }
 
         Arrays.sort(files, String.CASE_INSENSITIVE_ORDER);
-        System.out.println("\nFiles in '" + directoryPath + "' (ascending ):");
+        System.out.println("\nFiles in '" + directoryPath + "' (ascending, case-insensitive):");
         for (String f : files) {
             System.out.println("- " + f);
         }
@@ -35,7 +35,7 @@ public class FileManager {
         if (folder == null) return;
 
         if (containsIgnoreCase(folder, fileName)) {
-            System.out.println("A file with the same name already exists. Add operation aborted.");
+            System.out.println("A file with the same name (case-insensitive) already exists. Add operation aborted.");
             return;
         }
 
@@ -45,8 +45,7 @@ public class FileManager {
             if (created) {
                 System.out.println("File '" + fileName + "' added successfully.");
             } else {
-                // Shouldn’t hit this because of prior check, but handle just in case
-                System.out.println("File could not be created (unknown reason).");
+                System.out.println("File could not be created.");
             }
         } catch (IOException e) {
             System.out.println("Error creating file: " + e.getMessage());
@@ -60,14 +59,18 @@ public class FileManager {
 
         File target = getFileIgnoreCase(folder, fileName);
         if (target == null) {
-            System.out.println("File not found (match failed).");
+            System.out.println("File not found (case-insensitive match failed).");
             return;
         }
 
-        if (target.delete()) {
-            System.out.println("File '" + target.getName() + "' deleted successfully.");
-        } else {
-            System.out.println("Unable to delete the file (check permissions).");
+        try {
+            if (target.delete()) {
+                System.out.println("File '" + target.getName() + "' deleted successfully.");
+            } else {
+                System.out.println("Unable to delete the file.");
+            }
+        } catch (SecurityException e) {
+            System.out.println("Permission denied while deleting file: " + e.getMessage());
         }
     }
 
@@ -92,7 +95,7 @@ public class FileManager {
             if (folder.mkdir()) {
                 System.out.println("Root directory missing; created new folder: " + directoryPath);
             } else {
-                System.out.println("Cannot create root directory. Check write permissions.");
+                System.out.println("Cannot create root directory.");
                 return null;
             }
         }
